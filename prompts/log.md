@@ -20,3 +20,16 @@
   - Compliance and regulation
   - Reporting
 - Modules are implemented from scratch or by integrating with 3rd-party services.
+
+## UI/UX
+
+- Implement the following functions in front-end
+  - Authentication and authorization
+  - User management
+  - Double-entry ledger
+  - Payments and transfers
+  - FX
+  - Virtual account that supports both fiat and crypto
+  - Team workflow (e.g.: role-based approval and rejection)
+  - Compliance and regulation
+  - Reporting
