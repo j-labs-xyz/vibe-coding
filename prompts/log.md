@@ -33,3 +33,9 @@
   - Team workflow (e.g.: role-based approval and rejection)
   - Compliance and regulation
   - Reporting
+
+## Fine tune UI
+
+Apply logo to `apps/web/public/logo_megalith.jpeg`, and use its black and gold as the theme for the web app.
+
+Use the logo as favicon

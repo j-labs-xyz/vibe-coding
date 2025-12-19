@@ -77,14 +77,13 @@ export function Sidebar() {
     const pathname = usePathname();
 
     return (
-        <div className="space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white">
+        <div className="space-y-4 py-4 flex flex-col h-full bg-black text-white border-r border-zinc-800">
             <div className="px-3 py-2 flex-1">
                 <Link href="/dashboard" className="flex items-center pl-3 mb-14">
-                    <div className="relative w-8 h-8 mr-4">
-                        {/* Logo Placeholder */}
-                        <div className="bg-white/10 rounded-full w-full h-full flex items-center justify-center font-bold text-lg">V</div>
+                    <div className="relative w-8 h-8 mr-4 rounded-full overflow-hidden border border-gold-500/50">
+                        <img src="/logo.jpeg" alt="Logo" className="object-cover w-full h-full" />
                     </div>
-                    <h1 className="text-2xl font-bold">VastLink</h1>
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-gold-300 to-gold-500 bg-clip-text text-transparent">VastLink</h1>
                 </Link>
                 <div className="space-y-1">
                     {routes.map((route) => (
@@ -93,11 +92,11 @@ export function Sidebar() {
                             href={route.href}
                             className={cn(
                                 'text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition',
-                                pathname === route.href ? 'text-white bg-white/10' : 'text-zinc-400'
+                                pathname === route.href ? 'text-gold-400 bg-white/10' : 'text-zinc-400'
                             )}
                         >
                             <div className="flex items-center flex-1">
-                                <route.icon className={cn('h-5 w-5 mr-3', route.color)} />
+                                <route.icon className={cn('h-5 w-5 mr-3', pathname === route.href ? 'text-gold-400' : route.color)} />
                                 {route.label}
                             </div>
                         </Link>

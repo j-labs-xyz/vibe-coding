@@ -12,6 +12,20 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@theme {
+  --color-gold-50: #fbf8eb;
+  --color-gold-100: #f5eccd;
+  --color-gold-200: #ebd99f;
+  --color-gold-300: #e0c26c;
+  --color-gold-400: #d4a942;
+  --color-gold-500: #c68e28;
+  --color-gold-600: #aa701f;
+  --color-gold-700: #88531b;
+  --color-gold-800: #71431c;
+  --color-gold-900: #60381d;
+  --color-gold-950: #371e0e;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
