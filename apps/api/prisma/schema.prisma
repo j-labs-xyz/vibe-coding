@@ -10,18 +10,209 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// --- Auth & User Management ---
+
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Hashed
+  firstName String?
+  lastName  String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  virtualAccounts VirtualAccount[]
+  approvals       Approval[]
+  workflowRequests WorkflowRequest[]
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
+enum Role {
+  USER
+  ADMIN
+  COMPLIANCE_OFFICER
+  FINANCE_MANAGER
+}
+
+// --- Double-Entry Ledger ---
+
+model LedgerAccount {
+  id          String   @id @default(uuid())
+  name        String
+  type        AccountType
+  currency    String
+  balance     Decimal  @default(0) @db.Decimal(20, 8)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  entries     LedgerEntry[]
+}
+
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+}
+
+model LedgerTransaction {
+  id          String   @id @default(uuid())
+  reference   String?
+  description String
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  entries     LedgerEntry[]
+}
+
+model LedgerEntry {
+  id            String   @id @default(uuid())
+  amount        Decimal  @db.Decimal(20, 8)
+  direction     EntryDirection
+  
+  // Relations
+  transactionId String
+  transaction   LedgerTransaction @relation(fields: [transactionId], references: [id])
+  accountId     String
+  account       LedgerAccount     @relation(fields: [accountId], references: [id])
+}
+
+enum EntryDirection {
+  DEBIT
+  CREDIT
+}
+
+// --- Virtual Accounts (Fiat & Crypto) ---
+// Representing customer balances that map to the Ledger
+
+model VirtualAccount {
+  id           String   @id @default(uuid())
+  currency     String   // e.g., "USD", "BTC"
+  balance      Decimal  @default(0) @db.Decimal(20, 8)
+  status       AccountStatus @default(ACTIVE)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  payments     Payment[]
+  transfersFrom Transfer[] @relation("FromAccount")
+  transfersTo   Transfer[] @relation("ToAccount")
+}
+
+enum AccountStatus {
+  ACTIVE
+  FROZEN
+  CLOSED
+}
+
+// --- Payments & Transfers ---
+
+model Payment {
+  id              String   @id @default(uuid())
+  amount          Decimal  @db.Decimal(20, 8)
+  currency        String
+  status          PaymentStatus @default(PENDING)
+  method          String   // e.g. "ACH", "WIRE", "BLOCKCHAIN"
+  destination     String   // External address/IBAN
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  virtualAccountId String
+  virtualAccount   VirtualAccount @relation(fields: [virtualAccountId], references: [id])
+}
+
+model Transfer {
+  id              String   @id @default(uuid())
+  amount          Decimal  @db.Decimal(20, 8)
+  currency        String
+  status          PaymentStatus @default(PENDING)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  fromAccountId   String
+  fromAccount     VirtualAccount @relation("FromAccount", fields: [fromAccountId], references: [id])
+  toAccountId     String
+  toAccount       VirtualAccount @relation("ToAccount", fields: [toAccountId], references: [id])
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REJECTED
+}
+
+// --- FX ---
+
+model ExchangeRate {
+  id            String   @id @default(uuid())
+  pair          String   // e.g. "USD/EUR"
+  rate          Decimal  @db.Decimal(20, 8)
+  timestamp     DateTime @default(now())
+}
+
+// --- Team Workflow ---
+
+model WorkflowRequest {
+  id            String   @id @default(uuid())
+  type          String   // e.g. "LARGE_TRANSFER"
+  payload       Json     // Details of the request
+  status        WorkflowStatus @default(PENDING)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  requesterId   String
+  requester     User     @relation(fields: [requesterId], references: [id])
+  approvals     Approval[]
+}
+
+enum WorkflowStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Approval {
+  id                String   @id @default(uuid())
+  status            WorkflowStatus // APPROVED or REJECTED
+  comment           String?
+  createdAt         DateTime @default(now())
+
+  // Relations
+  workflowRequestId String
+  workflowRequest   WorkflowRequest @relation(fields: [workflowRequestId], references: [id])
+  approverId        String
+  approver          User     @relation(fields: [approverId], references: [id])
+}
+
+// --- Compliance ---
+
+model ComplianceLog {
+  id            String   @id @default(uuid())
+  action        String
+  entityId      String
+  entityType    String
+  details       Json?
+  riskScore     Int?
+  createdAt     DateTime @default(now())
+}
+
+// --- Reporting ---
+// Storing generated reports or aggregation snapshots
+
+model Report {
+  id            String   @id @default(uuid())
+  type          String   // e.g. "DAILY_BALANCE"
+  data          Json
+  generatedAt   DateTime @default(now())
 }
