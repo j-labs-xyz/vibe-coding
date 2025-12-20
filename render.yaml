@@ -1,20 +1,18 @@
-services:
+databases:
   # --------------------------------------------------------------------------------
   # Database (Postgres)
   # --------------------------------------------------------------------------------
-  - type: psql
-    name: vastlink-db
-    env: docker
-    plan: free # Change to starter/standard for production
+  - name: vastlink-db
     databaseName: vibe_db
     user: vibe_user
+    plan: free # Change to starter/standard for production
 
+services:
   # --------------------------------------------------------------------------------
   # Redis
   # --------------------------------------------------------------------------------
   - type: redis
     name: vastlink-redis
-    env: docker
     plan: free # Change to starter/standard for production
     ipAllowList: [] # Allow all internal
 
