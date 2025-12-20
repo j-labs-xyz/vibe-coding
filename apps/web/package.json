@@ -10,11 +10,14 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
+    "auth0": "^5.2.0",
     "clsx": "^2.1.1",
+    "jose": "^6.1.3",
     "lucide-react": "^0.562.0",
     "next": "16.0.10",
     "react": "19.2.1",
     "react-dom": "19.2.1",
+    "stytch": "^12.43.1",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
