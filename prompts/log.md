@@ -79,3 +79,7 @@ yOBD48BzULaYPdbMO3JDy2uxmeQjtJvm
 Client Secret
 h6CjA5mlTmyMZQgcHEMNHjbPxNQ9Hd90W7LyT54BPdFbFuHYmOzmjH0DSnsnEm39
 ```
+
+### Redirect to the dashboard page after sign in
+
+Please redirect the user to the dashboard page after he successfully signs in.

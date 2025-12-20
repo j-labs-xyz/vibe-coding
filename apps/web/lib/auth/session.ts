@@ -10,8 +10,8 @@ export async function createSession(userId: string, email: string) {
         .setExpirationTime('24h')
         .sign(secret);
 
-    // @ts-ignore
-    cookies().set('session', jwt, {
+    const cookieStore = await cookies();
+    cookieStore.set('session', jwt, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         maxAge: 60 * 60 * 24, // 1 day
@@ -20,8 +20,7 @@ export async function createSession(userId: string, email: string) {
 }
 
 export async function getSession() {
-    // @ts-ignore
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('session')?.value;
 
     if (!token) return null;
@@ -35,6 +34,6 @@ export async function getSession() {
 }
 
 export async function logoutSession() {
-    // @ts-ignore
-    cookies().delete('session');
+    const cookieStore = await cookies();
+    cookieStore.delete('session');
 }
