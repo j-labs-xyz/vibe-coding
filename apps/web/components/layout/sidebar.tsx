@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/lib/auth-context';
 import {
     LayoutDashboard,
     Users,
@@ -75,6 +76,7 @@ const routes = [
 
 export function Sidebar() {
     const pathname = usePathname();
+    const { user, logout } = useAuth();
 
     return (
         <div className="space-y-4 py-4 flex flex-col h-full bg-black text-white border-r border-zinc-800">
@@ -103,8 +105,21 @@ export function Sidebar() {
                     ))}
                 </div>
             </div>
-            <div className="px-3 py-2">
-                <div className="text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition text-zinc-400">
+            <div className="px-3 py-2 border-t border-zinc-800">
+                {user && (
+                    <div className="flex items-center gap-x-3 mb-4 px-3">
+                        <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-bold">
+                            {user.email ? user.email[0].toUpperCase() : 'U'}
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-sm font-medium text-white max-w-[150px] truncate">{user.email}</span>
+                        </div>
+                    </div>
+                )}
+                <div
+                    onClick={() => logout()}
+                    className="text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition text-zinc-400"
+                >
                     <div className="flex items-center flex-1">
                         <LogOut className="h-5 w-5 mr-3 text-white" />
                         Sign Out

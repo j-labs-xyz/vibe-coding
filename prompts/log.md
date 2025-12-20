@@ -82,4 +82,12 @@ h6CjA5mlTmyMZQgcHEMNHjbPxNQ9Hd90W7LyT54BPdFbFuHYmOzmjH0DSnsnEm39
 
 ### Redirect to the dashboard page after sign in
 
-Please redirect the user to the dashboard page after he successfully signs in.
+- Please redirect the user to the dashboard page after he successfully signs in.
+
+- It is not working, still redirecting back to sign in page after the user signs in successfully.
+
+### Post sign in
+
+- Please add an avatar on the side bar after the user signs in successfully.
+
+- Please implement sign out, and redirect back to sign in page after sign out.

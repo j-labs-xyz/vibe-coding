@@ -35,18 +35,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // This Context provides the logout function.
 
     const logout = async () => {
+        // Perform a hard redirect to the logout endpoint to ensure cookies are cleared server-side
+        // and the browser navigates to the login page with a fresh state.
+        window.location.href = '/api/auth/logout';
+    };
+
+    const checkSession = async () => {
         try {
-            await axios.post('/api/auth/logout');
-            setUser(null);
-            router.push('/auth/signin');
+            const { data } = await axios.get('/api/auth/me');
+            setUser(data.user);
         } catch (error) {
-            console.error('Logout failed', error);
+            setUser(null);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        // Placeholder for session re-hydration
-        setIsLoading(false);
+        checkSession();
     }, []);
 
 

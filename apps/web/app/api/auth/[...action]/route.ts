@@ -51,5 +51,11 @@ export async function GET(req: NextRequest, props: { params: Promise<{ action: s
         }
     }
 
+    if (action === 'logout') {
+        await provider.logout();
+        await logoutSession();
+        return NextResponse.redirect(new URL('/auth/signin', req.url));
+    }
+
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
 }
