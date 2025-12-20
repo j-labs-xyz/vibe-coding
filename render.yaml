@@ -55,6 +55,6 @@ services:
         fromService:
           type: web
           name: vastlink-api
-          property: url
+          envVarKey: RENDER_EXTERNAL_URL
       - key: NODE_ENV
         value: production
