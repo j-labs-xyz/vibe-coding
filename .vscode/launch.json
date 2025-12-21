@@ -1,0 +1,39 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "JavaScript Debug Terminal (v20.14.0)",
+            "type": "node-terminal",
+            "request": "launch",
+            "runtimeVersion": "20.14.0",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Debug Web (Next.js)",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ],
+            "cwd": "${workspaceFolder}/apps/web",
+            "runtimeVersion": "20.14.0",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug API (NestJS)",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "start:debug"
+            ],
+            "cwd": "${workspaceFolder}/apps/api",
+            "runtimeVersion": "20.14.0",
+            "console": "integratedTerminal"
+        }
+    ]
+}
