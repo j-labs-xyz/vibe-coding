@@ -91,3 +91,11 @@ h6CjA5mlTmyMZQgcHEMNHjbPxNQ9Hd90W7LyT54BPdFbFuHYmOzmjH0DSnsnEm39
 - Please add an avatar on the side bar after the user signs in successfully.
 
 - Please implement sign out, and redirect back to sign in page after sign out.
+
+### Ledger
+
+- Please find a reliable and established double-entry ledger implementation, and integrate it into the web app.
+
+- Same architecture principle, a high level interface for ledgers, and low level implementations for different ledgers.
+
+- Please implement an UI/UX interface for the ledger, and it should be able to create accounts, post transactions, and view the balance sheet.
